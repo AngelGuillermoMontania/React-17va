@@ -6,7 +6,8 @@ import data from "./data.js";
 export default function App() {
   const [cities, setCities] = useState([]);
 
-  const apiKey = "4f3c88ba651a35b3eda9f05221decec6";
+  const apiKey = import.meta.env.VITE_API_KEY_OPENWEATHER;
+  console.log(apiKey);
 
   function onClose(id) {
     setCities(cities.filter((c) => c.id != id));
@@ -14,11 +15,10 @@ export default function App() {
 
   function onSearch(ciudad) {
     fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=standard`
+      `https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=standard`
     )
       .then((r) => r.json())
       .then((recurso) => {
-        console.log(recurso);
         if (recurso.main !== undefined) {
           const ciudad = {
             min: Math.round(recurso.main.temp_min),
@@ -41,7 +41,10 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <div
+      className="App"
+      style={{ backgroundColor: "black", color: "white", height: "100vh" }}
+    >
       <Nav onSearch={onSearch} />
       <ContainCard cities={cities} onClose={onClose} />
     </div>

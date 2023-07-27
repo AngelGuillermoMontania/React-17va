@@ -1,11 +1,9 @@
 import React from "react";
 
 export default function Card({ max, min, name, img, onClose, id }) {
-  console.log(max);
-  console.log(min);
   // acá va tu código
   return (
-    <div>
+    <div style={{ border: "1px solid white", width: "20vw" }}>
       <div>
         <button onClick={() => onClose(id)}>X</button>
       </div>

@@ -5,7 +5,13 @@ export default function ContainCards({ cities, onClose }) {
   // acá va tu código
   // tip, podés usar un map
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        padding: "3rem",
+      }}
+    >
       {cities &&
         cities.map((city) => {
           return (

@@ -1,93 +1,112 @@
 import { useState } from "react";
 import "./App.css";
+import { useFormik } from "formik";
 
 function App() {
-  const [input, setInput] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    submit: "",
-    disabled: true,
-  });
-
-  function handleChange(e) {
-    console.log(e.target.name, e.target.value); // e.target.name accede a la propiedad name de el input
-
-    switch (e.target.name) {
-      case "firstName":
-        errors.firstName =
-          e.target.value.length < 5
-            ? "Nombre debe tener almenos 5 caracteres"
-            : "";
-        break;
-      // case "lastName":
-      //   errors.lastName =
-      //     value.length < 5 ? "Apellido debe tener almenos 5 caracteres" : "";
-      //   break;
-      // case "email":
-      //   var emailPattern = /\S+@\S+\.\S+/;
-      //   errors.user = emailPattern.test(value)
-      //     ? ""
-      //     : "El usuario debe ser un email";
-      //   break;
-      default:
-        setErrors({ ...errors, disabled: false });
-        break;
+  const validate = (values) => {
+    const errors = {};
+    if (!values.firstName) {
+      errors.firstName = "Required";
+    } else if (values.firstName.length > 15) {
+      errors.firstName = "Must be 15 characters or less";
     }
 
-    setInput({ ...input, [e.target.name]: e.target.value });
-  }
-
-  function Submit() {
-    if (!errors.disabled) {
-      // ENVIAR INFORMACION
-    } else {
-      setErrors({
-        ...errors,
-        submit: "ESTAN TODOS LOS CAMPOS VACIOS VIVO, CONMIGO NO HE",
-      });
+    if (!values.lastName) {
+      errors.lastName = "Required";
+    } else if (values.lastName.length > 20) {
+      errors.lastName = "Must be 20 characters or less";
     }
-  }
+
+    if (!values.email) {
+      errors.email = "Required";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Invalid email address";
+    }
+
+    return errors;
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      firstName: "",
+      lastName: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      // axios
+    },
+  });
 
   return (
-    <div>
-      <form onSubmit={Submit}>
-        <input
-          placeholder="FIRST NAME"
-          type="text"
-          name="firstName"
-          value={input.firstName}
-          onChange={handleChange}
-        />
-        {errors.firstName ? <span>{errors.firstName} </span> : ""}
-        <input
-          placeholder="Last Name"
-          type="text"
-          name="lastName"
-          value={input.lastName}
-          onChange={handleChange}
-        />
-        {errors.lastName ? <span>{errors.lastName} </span> : ""}
-        <input
-          placeholder="Email"
-          type="text"
-          name="email"
-          value={input.email}
-          onChange={handleChange}
-        />
-        {errors.submit ? <span>{errors.submit}</span> : ""}
-        <button type="submit">SUBMIT</button>
-      </form>
-    </div>
+    <form onSubmit={formik.handleSubmit}>
+      <label htmlFor="firstName">First Name</label>
+      <input
+        id="firstName"
+        name="firstName"
+        type="text"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.firstName}
+      />
+      {formik.touched.firstName && formik.errors.firstName ? (
+        <div>{formik.errors.firstName}</div>
+      ) : null}
+      <label htmlFor="lastName">Last Name</label>
+      <input
+        id="lastName"
+        name="lastName"
+        type="text"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.lastName}
+      />
+      {formik.touched.lastName && formik.errors.lastName ? (
+        <div>{formik.errors.lastName}</div>
+      ) : null}
+      <label htmlFor="email">Email Address</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.email}
+      />
+      {formik.touched.email && formik.errors.email ? (
+        <div>{formik.errors.email}</div>
+      ) : null}
+
+      <button type="submit">Submit</button>
+    </form>
   );
 }
 
 export default App;
 
+/* 
+
+fetch("direccionWeb", {
+  method: "POST",
+  headers: {
+    'Content-Type': 'Application/json'
+  },
+    body: JSON.stringify(data),
+})
+  .then(response => response.JSON())
+  .then(data => setState(data))
+  .catch()
+  .finally()
+
+axios("direccionWeb")    // GET IMPLICITO
+axios.get("direccionWeb")
+axios.post("direccionWeb", data)
+axios.put("direccionWeb", data)
+axios.delete(`direccionWeb?idProducto=${5}`)
+  .then(data => setState(data))
+  .catch()
+  .finally()
+
+*/

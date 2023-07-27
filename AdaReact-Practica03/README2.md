@@ -726,7 +726,7 @@ Vamos a empezar con la forma más verbosa de usar Formik. Si bien esto puede par
 
 Imaginemos que queremos añadir un formulario de suscripción a un boletín para un blog. Para empezar, nuestro formulario tendrá sólo un campo llamado `email`. Con Formik, esto es sólo unas pocas líneas de código.
 
-```javascript
+```
 import React from 'react';
  import { useFormik } from 'formik';
 

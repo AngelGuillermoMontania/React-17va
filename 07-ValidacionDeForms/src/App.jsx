@@ -2,8 +2,10 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [data, setData] = useState([]);
+
   const [input, setInput] = useState({
-    firstName: "",
+    firstName: "a",
     lastName: "",
     email: "",
     phone: "",
@@ -45,14 +47,25 @@ function App() {
     setInput({ ...input, [e.target.name]: e.target.value });
   }
 
-  function Submit() {
-    if (!errors.disabled) {
-      // ENVIAR INFORMACION
-    } else {
-      setErrors({
-        ...errors,
-        submit: "ESTAN TODOS LOS CAMPOS VACIOS VIVO, CONMIGO NO HE",
-      });
+  async function Submit(e) {
+    e.preventDefault();
+    try {
+      if (!errors.disabled) {
+        setInput({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+        });
+        // ENVIAR INFORMACION await
+      } else {
+        setErrors({
+          ...errors,
+          submit: "ESTAN TODOS LOS CAMPOS VACIOS VIVO, CONMIGO NO HE",
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
