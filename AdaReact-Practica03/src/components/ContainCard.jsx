@@ -3,7 +3,12 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 function ContainCard({ characters }) {
   return (
-    <Grid display="flex" justifyContent="space-around" alignItems="center" sx={{flexWrap: "wrap"}}>
+    <Grid
+      display="flex"
+      justifyContent="space-around"
+      alignItems="center"
+      sx={{ flexWrap: "wrap" }}
+    >
       {characters &&
         characters.map((character) => (
           <Card
