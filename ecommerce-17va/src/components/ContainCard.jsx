@@ -1,10 +1,10 @@
-import { Box } from "@mui/material";
-import { useState } from "react";
+import { useState } from "react"; // ESTO ES UN TIPO DE SUBDIVISION DE IMPORTACION
+
 import CardProduct from "./CardProduct";
 
+import { Box } from "@mui/material";
 // IMPORTAR LA  DB
 import { db } from "../firebaseConfig";
-
 // IMPORTAR LOS HOOKS DE FIREBASE
 import { getDocs, collection } from "firebase/firestore";
 
@@ -24,20 +24,41 @@ export default function ContainCard() {
             id: product.id,
           };
         });
-
         setAllProducts(products);
       })
       .catch((error) => console.log(error));
   }
 
   return (
-    <Box
-      sx={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}
-    >
-      {allProducts.map((product) => (
-        <CardProduct />
-      ))}
-      <button onClick={getProducts}>Ver Productos</button>
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}
+      >
+        {allProducts.map((product) => (
+          <CardProduct
+            categoria={product.categoria}
+            descripcion={product.descripcion}
+            img={product.img}
+            id={product.id}
+            marca={product.marca}
+            modelo={product.modelo}
+            precio={product.precio}
+            key={product.id}
+          />
+        ))}
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <button
+          style={{ padding: "8px", backgroundColor: "purple", color: "white" }}
+          onClick={getProducts}
+        >
+          Ver productos
+        </button>
+      </Box>
     </Box>
   );
 }

@@ -1,34 +1,40 @@
-import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import { CardActionArea, CardActions } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-export default function CardProduct() {
+export default function CardProduct({
+  categoria,
+  descripcion,
+  id,
+  img,
+  marca,
+  modelo,
+  precio,
+}) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: 245, margin: "0 50px 25px" }}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
+        <CardMedia component="img" height="225" image={img} alt={modelo} />
         <CardContent>
+          <Typography gutterBottom variant="h4" component="div">
+            {marca}
+          </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            Lizard
+            {modelo}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {descripcion}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {`$ ${precio}`}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
+        <ShoppingCartIcon size="large" color="primary" />
       </CardActions>
     </Card>
   );
