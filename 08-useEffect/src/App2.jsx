@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      <button onClick={changeCondition}>Cambiar Condicion</button>
+      <button onClick={changeCondition}>Cambiar Condicion</button>{" "}
       {condition ? <Prueba /> : <Prueba2 />}
     </>
   );
