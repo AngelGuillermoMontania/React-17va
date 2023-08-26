@@ -1,37 +1,55 @@
 import { useState, useEffect } from "react"; // ESTO ES UN TIPO DE SUBDIVISION DE IMPORTACION
 // import { PacmanLoader } from "react-spinners";
 import { ThreeCircles } from "react-loader-spinner";
+import { getDocs, collection, query, where } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { useParams } from "react-router-dom";
 
 import CardProduct from "./CardProduct";
 
 import { Box } from "@mui/material";
 // IMPORTAR LA  DB
-import { db } from "../firebaseConfig";
 // IMPORTAR LOS HOOKS DE FIREBASE
-import { getDocs, collection } from "firebase/firestore";
 
 export default function ContainCard() {
   const [allProducts, setAllProducts] = useState([]);
-  // const [loading, setLoading] = useState(true);
+
+  const { nameCategory } = useParams();
 
   useEffect(() => {
     /* ACCEDO A LA COLECCION QUE QUIERO CON EL HOOK COLLECTION */
     const productos = collection(db, "Producto");
 
-    /* ACCEDO A LOS DOCUMENTOS DE LA COLLECTION BUSCADA */
-    getDocs(productos)
-      .then((res) => {
-        const products = res.docs.map((product) => {
-          return {
-            ...product.data(),
-            id: product.id,
-          };
-        });
-        setAllProducts(products);
-        // setLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    // where = donde
+    if (nameCategory) {
+      // Si existe un parametro en la url, buscara esa categoria
+      const q = query(productos, where("categoria", "==", nameCategory));
+      getDocs(q)
+        .then((res) => {
+          const products = res.docs.map((product) => {
+            return {
+              ...product.data(),
+              id: product.id,
+            };
+          });
+          setAllProducts(products);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      // Si no, mostrare todos los productos
+      getDocs(productos)
+        .then((res) => {
+          const products = res.docs.map((product) => {
+            return {
+              ...product.data(),
+              id: product.id,
+            };
+          });
+          setAllProducts(products);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [nameCategory]);
 
   return (
     <Box
@@ -40,23 +58,9 @@ export default function ContainCard() {
         alignItems: "center",
         justifyContent: "space-around",
         flexWrap: "wrap",
-        minHeight: "70vh",
+        minHeight: "85vh",
       }}
     >
-      {/* <PacmanLoader loading={true} color="#FFFFFF" size="70" />
-      {allProducts.map((product) => (
-        <CardProduct
-          categoria={product.categoria}
-          descripcion={product.descripcion}
-          img={product.img}
-          id={product.id}
-          marca={product.marca}
-          modelo={product.modelo}
-          precio={product.precio}
-          key={product.id}
-        />
-      ))}
-      */}
       {allProducts.length ? (
         allProducts.map((product) => (
           <CardProduct

@@ -1,4 +1,6 @@
-import * as React from "react";
+import { useState } from "react";
+
+import { Link, NavLink /* , useNavigate */ } from "react-router-dom";
 
 import { AppBar, Box, Toolbar, IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -16,16 +18,20 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Search } from "@mui/icons-material";
 import { styled, alpha } from "@mui/material/styles";
 import { TextField } from "@mui/material";
+import logo from "../assets/logo.svg";
 
 const pages = ["Deportivas", "Urbanas", "Zapatos"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  // const navigate = useNavigate(); /* Inicializo una instancia de navigate */
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+    // navigate("/")  /* Redirige a la persona la url indicada */
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -66,28 +72,56 @@ function Header() {
     },
   }));
 
+  const ButtonLink = styled(Button)(({ theme }) => ({
+    margin: "0 10px",
+    "&active": {
+      color: "white",
+      backgroundColor: "#4fa94d",
+    },
+    "&:focus": {
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+  }));
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
+          <Link
+            to="/"
+            style={{
               textDecoration: "none",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            CALZATE
-          </Typography>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <img
+                src={logo}
+                alt="not found"
+                width={100}
+                height={100}
+                style={{ margin: "0 5px" }}
+              />
+            </Box>
+            <Typography
+              variant="h6"
+              noWrap
+              component="span"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              CALZATE
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -119,13 +153,27 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link
+                  to={`/category/${page}`}
+                  key={page}
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+            <img
+              src={logo}
+              alt="not found"
+              width={100}
+              height={50}
+              style={{ margin: "0 5px" }}
+            />
+          </Box>
           <Typography
             variant="h5"
             noWrap
@@ -145,26 +193,50 @@ function Header() {
             CALZATE
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              width: "50%",
+              margin: "0 10px",
+            }}
+          >
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
+              <Link to={`category/${page}`} key={page}>
+                <ButtonLink
+                  variant="outlined"
+                  onClick={handleCloseNavMenu}
+                  // sx={{
+                  //   my: 2,
+                  //   color: "white",
+                  //   display: "block",
+                  //   margin: "0 10px",
+                  // }}
+                  // activeStyle={{
+                  //   color: "white",
+                  //   backgroundColor: "#4fa94d",
+                  // }}
+                  // style={({ isActive, isPending }) => {
+                  //   return {
+                  //     fontWeight: isActive ? "bold" : "",
+                  //     color: isPending ? "red" : "black",
+                  //   };
+                  // }}
+                >
+                  {page}
+                </ButtonLink>
+              </Link>
             ))}
-            <TextField
-              sx={{ ml: 2, my: 2 }}
-              id="standard-basic"
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
-              size="small"
-              variant="standard"
-            />
           </Box>
+          <TextField
+            sx={{ ml: 2, my: 2 }}
+            id="standard-basic"
+            InputProps={{
+              startAdornment: <SearchIcon />,
+            }}
+            size="small"
+            variant="standard"
+          />
 
           <Box sx={{ flexGrow: 0 }}>
             {/* <Tooltip title="Open settings">
