@@ -12,3 +12,24 @@ export default function Detail() {
     </div>
   );
 }
+
+/* 
+
+function sumar (initialValue) {
+
+  const [num, setNum] = useState(initialValue)
+
+  fetch()
+    .then(res => setNum(res)
+
+  return num
+}
+
+const num1 = sumar(5)    // 5
+
+const numX = sumar(60)   // 60
+
+
+console.log(num1, numX)     //  5, 60
+
+ */

@@ -21,7 +21,6 @@ export default function DetailProduct() {
   useEffect(() => {
     const productos = collection(db, "Producto");
     const ref = doc(productos, idProduct);
-    console.log("ref");
     getDoc(ref)
       .then((res) => {
         setProduct({
