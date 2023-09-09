@@ -1,53 +1,24 @@
-import { useState, useEffect } from "react"; // ESTO ES UN TIPO DE SUBDIVISION DE IMPORTACION
-// import { PacmanLoader } from "react-spinners";
+import { useEffect } from "react"; // ESTO ES UN TIPO DE SUBDIVISION DE IMPORTACION
 import { ThreeCircles } from "react-loader-spinner";
-import { getDocs, collection, query, where } from "firebase/firestore";
-import { db } from "../firebaseConfig";
 import { useParams } from "react-router-dom";
 
 import CardProduct from "./CardProduct";
+import useProduct from "./useProduct";
 
 import { Box } from "@mui/material";
-// IMPORTAR LA  DB
-// IMPORTAR LOS HOOKS DE FIREBASE
 
 export default function ContainCard() {
-  const [allProducts, setAllProducts] = useState([]);
-
   const { nameCategory } = useParams();
+  const { allProducts, getAllProduct, getCategoryProducts, loading } =
+    useProduct();
 
   useEffect(() => {
-    /* ACCEDO A LA COLECCION QUE QUIERO CON EL HOOK COLLECTION */
-    const productos = collection(db, "Producto");
-
-    // where = donde
     if (nameCategory) {
-      // Si existe un parametro en la url, buscara esa categoria
-      const q = query(productos, where("categoria", "==", nameCategory));
-      getDocs(q)
-        .then((res) => {
-          const products = res.docs.map((product) => {
-            return {
-              ...product.data(),
-              id: product.id,
-            };
-          });
-          setAllProducts(products);
-        })
-        .catch((error) => console.log(error));
+      // productos de esa categoria
+      getCategoryProducts(nameCategory);
     } else {
-      // Si no, mostrare todos los productos
-      getDocs(productos)
-        .then((res) => {
-          const products = res.docs.map((product) => {
-            return {
-              ...product.data(),
-              id: product.id,
-            };
-          });
-          setAllProducts(products);
-        })
-        .catch((error) => console.log(error));
+      // traeme todos
+      getAllProduct();
     }
   }, [nameCategory]);
 
@@ -61,31 +32,28 @@ export default function ContainCard() {
         minHeight: "85vh",
       }}
     >
-      {allProducts.length ? (
-        allProducts.map((product) => (
-          <CardProduct
-            categoria={product.categoria}
-            descripcion={product.descripcion}
-            img={product.img}
-            id={product.id}
-            marca={product.marca}
-            modelo={product.modelo}
-            precio={product.precio}
-            key={product.id}
-          />
-        ))
-      ) : (
-        <ThreeCircles
-          height="100"
-          width="100"
-          color="#4fa94d"
-          visible={true}
-          ariaLabel="three-circles-rotating"
-          outerCircleColor="#FF1515"
-          innerCircleColor="#15FF15"
-          middleCircleColor="#1515FF"
+      <ThreeCircles
+        height="100"
+        width="100"
+        color="#4fa94d"
+        visible={loading}
+        ariaLabel="three-circles-rotating"
+        outerCircleColor="#FF1515"
+        innerCircleColor="#15FF15"
+        middleCircleColor="#1515FF"
+      />
+      {allProducts.map((product) => (
+        <CardProduct
+          categoria={product.categoria}
+          descripcion={product.descripcion}
+          img={product.img}
+          id={product.id}
+          marca={product.marca}
+          modelo={product.modelo}
+          precio={product.precio}
+          key={product.id}
         />
-      )}
+      ))}
     </Box>
   );
 }

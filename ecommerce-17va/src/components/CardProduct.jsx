@@ -19,7 +19,7 @@ export default function CardProduct({
   return (
     <Card sx={{ width: 245, margin: "0 50px 25px" }}>
       <Link
-        to={`detailProduct/${id}`}
+        to={`/detailProduct/${id}`}
         style={{ textDecoration: "none", color: "white" }}
       >
         <CardActionArea>

@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-
-import { collection, doc, getDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import useProduct from "./useProduct";
 
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -16,19 +15,10 @@ import { ShoppingCart } from "@mui/icons-material";
 export default function DetailProduct() {
   const { idProduct } = useParams();
 
-  const [product, setProduct] = useState({});
+  const { product, getDetailProduct } = useProduct();
 
   useEffect(() => {
-    const productos = collection(db, "Producto");
-    const ref = doc(productos, idProduct);
-    getDoc(ref)
-      .then((res) => {
-        setProduct({
-          ...res.data(),
-          id: res.id,
-        });
-      })
-      .catch((error) => console.log(error));
+    getDetailProduct(idProduct);
   }, [idProduct]);
 
   return (
