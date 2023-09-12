@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import useProduct from "./useProduct";
@@ -11,15 +11,31 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box, Container } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
+import { CartContext } from "../context/CartContext";
 
 export default function DetailProduct() {
   const { idProduct } = useParams();
+  const [count, setCount] = useState(1);
+
+  const { agregarProducto } = useContext(CartContext);
 
   const { product, getDetailProduct } = useProduct();
 
   useEffect(() => {
     getDetailProduct(idProduct);
   }, [idProduct]);
+
+  function sumarCount() {
+    if (count + 1 <= product.stock) {
+      setCount(count + 1);
+    }
+  }
+
+  function restarCount() {
+    if (count - 1 >= 1) {
+      setCount(count - 1);
+    }
+  }
 
   return (
     <Container>
@@ -67,12 +83,21 @@ export default function DetailProduct() {
           <CardActions
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               width: "100%",
               justifyContent: "center",
             }}
           >
-            <Button size="medium" variant="contained">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button onClick={restarCount}>RESTAR</button>
+              <span>{count}</span>
+              <button onClick={sumarCount}>SUMAR</button>
+            </div>
+            <Button
+              size="medium"
+              variant="contained"
+              onClick={() => agregarProducto({ ...product, cantidad: count })}
+            >
               Agregar al carrito <ShoppingCart size="medium" />
             </Button>
           </CardActions>

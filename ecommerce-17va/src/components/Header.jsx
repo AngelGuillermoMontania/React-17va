@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { Link, NavLink /* , useNavigate */ } from "react-router-dom";
 
-import { AppBar, Box, Toolbar, IconButton } from "@mui/material";
+import { AppBar, Box, Toolbar, IconButton, Badge } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,6 +19,7 @@ import { Search } from "@mui/icons-material";
 import { styled, alpha } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import logo from "../assets/logo.svg";
+import { CartContext } from "../context/CartContext";
 
 const pages = ["Deportivas", "Urbanas", "Zapatos"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -28,6 +29,8 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   // const navigate = useNavigate(); /* Inicializo una instancia de navigate */
+
+  const { calcularTotalProductosEnCarrito } = useContext(CartContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -237,15 +240,17 @@ function Header() {
             size="small"
             variant="standard"
           />
+          <Link to="/cart" style={{ textDecoration: "none" }}>
+            <Badge
+              badgeContent={calcularTotalProductosEnCarrito()}
+              color="success"
+              sx={{ marginLeft: "50px" }}
+            >
+              <ShoppingCartIcon color="action" />
+            </Badge>
+          </Link>
 
           <Box sx={{ flexGrow: 0 }}>
-            {/* <Tooltip title="Open settings">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-              ></IconButton>
-              <ShoppingCartIcon />
-            </Tooltip> */}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"

@@ -6,6 +6,8 @@ import ContainCard from "./components/ContainCard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import DetailProduct from "./components/DetailProduct";
+import CartContextProvider from "./context/CartContext";
+import Cart from "./components/Cart";
 
 // const router = createBrowserRouter([   /* ENRUTAMIENTO AVANZADO --- HACEN LO MISMO QUE EL UTILIZADO EN LA APP */
 //   {
@@ -36,14 +38,16 @@ import DetailProduct from "./components/DetailProduct";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<ContainCard />} />
-        <Route path="/category/:nameCategory" element={<ContainCard />} />
-        <Route path="/detailProduct/:idProduct" element={<DetailProduct />} />
-        {/* <Route path="/cart" element={<Cart />} /> */}
-        <Route path="*" element={<h1>NOT FOUND</h1>} />
-      </Routes>
+      <CartContextProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<ContainCard />} />
+          <Route path="/category/:nameCategory" element={<ContainCard />} />
+          <Route path="/detailProduct/:idProduct" element={<DetailProduct />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<h1>NOT FOUND</h1>} />
+        </Routes>
+      </CartContextProvider>
       <Footer />
     </BrowserRouter>
   );
