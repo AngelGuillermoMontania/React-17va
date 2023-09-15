@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -10,10 +9,12 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { ShoppingCart } from "@mui/icons-material";
+import CountDeleteCart from "./CountDeleteCart";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
-  const { cart, calcularTotalPrecio } = useContext(CartContext);
+  const { cart, calcularTotalPrecio, eliminarProductoPorId, resetCount } =
+    useContext(CartContext);
 
   return (
     <Container>
@@ -28,12 +29,14 @@ export default function Cart() {
               margin: "50px 0",
             }}
           >
-            <CardMedia
-              sx={{ height: 200, width: 300 }}
-              image={product.img}
-              title={product.id}
-              component="div"
-            />
+            <Link to={`/detailProduct/${product.id}`}>
+              <CardMedia
+                sx={{ height: 200, width: 300 }}
+                image={product.img}
+                title={product.id}
+                component="div"
+              />
+            </Link>
             <Box
               sx={{
                 display: "flex",
@@ -61,7 +64,7 @@ export default function Cart() {
                 </Typography>
               </CardContent>
               <Typography variant="h5" color="text.secondary">
-                Cantidad: {product.cantidad}
+                Cantidad En Carrito: {product.cantidad}
               </Typography>
               <CardActions
                 sx={{
@@ -70,15 +73,12 @@ export default function Cart() {
                   justifyContent: "center",
                 }}
               >
-                <Button
-                  size="medium"
-                  variant="contained"
-                  // onClick={() =>
-                  //   agregarProducto({ ...product, cantidad: count })
-                  // }
-                >
-                  Eliminar del carrito <ShoppingCart size="medium" />
-                </Button>
+                <CountDeleteCart
+                  onDelete={(count) => {
+                    eliminarProductoPorId(product.id, count);
+                  }}
+                  cantidad={product.cantidad}
+                />
               </CardActions>
             </Box>
           </Card>

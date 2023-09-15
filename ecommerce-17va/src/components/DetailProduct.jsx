@@ -12,30 +12,21 @@ import Typography from "@mui/material/Typography";
 import { Box, Container } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
 import { CartContext } from "../context/CartContext";
+import useCount from "./useCount";
 
 export default function DetailProduct() {
   const { idProduct } = useParams();
-  const [count, setCount] = useState(1);
 
-  const { agregarProducto } = useContext(CartContext);
+  const { agregarProducto, devolverCantidadPorProducto } =
+    useContext(CartContext);
 
   const { product, getDetailProduct } = useProduct();
+
+  const { count, sumarCount, restarCount } = useCount();
 
   useEffect(() => {
     getDetailProduct(idProduct);
   }, [idProduct]);
-
-  function sumarCount() {
-    if (count + 1 <= product.stock) {
-      setCount(count + 1);
-    }
-  }
-
-  function restarCount() {
-    if (count - 1 >= 1) {
-      setCount(count - 1);
-    }
-  }
 
   return (
     <Container>
@@ -91,11 +82,25 @@ export default function DetailProduct() {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <button onClick={restarCount}>RESTAR</button>
               <span>{count}</span>
-              <button onClick={sumarCount}>SUMAR</button>
+              <button
+                onClick={() => {
+                  if (
+                    count + 1 <=
+                    product.stock - devolverCantidadPorProducto(product.id)
+                  ) {
+                    sumarCount();
+                  }
+                }}
+              >
+                SUMAR
+              </button>
             </div>
             <Button
               size="medium"
               variant="contained"
+              disabled={
+                product.stock === devolverCantidadPorProducto(product.id)
+              }
               onClick={() => agregarProducto({ ...product, cantidad: count })}
             >
               Agregar al carrito <ShoppingCart size="medium" />
