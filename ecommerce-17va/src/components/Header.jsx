@@ -1,21 +1,18 @@
 import { useContext, useState } from "react";
 
-import { Link, NavLink /* , useNavigate */ } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import { AppBar, Box, Toolbar, IconButton, Badge } from "@mui/material";
+import { AppBar, Box, Toolbar, IconButton, Badge, Avatar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Search } from "@mui/icons-material";
 import { styled, alpha } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import logo from "../assets/logo.svg";
@@ -32,6 +29,9 @@ function Header() {
 
   const { calcularTotalProductosEnCarrito } = useContext(CartContext);
 
+  const { loginWithRedirect, logout, isAuthenticated, isLoading, user } =
+    useAuth0();
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
     // navigate("/")  /* Redirige a la persona la url indicada */
@@ -47,6 +47,8 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  console.log(user);
 
   const SearchIconWrapper = styled("div")(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -206,33 +208,14 @@ function Header() {
           >
             {pages.map((page) => (
               <Link to={`category/${page}`} key={page}>
-                <ButtonLink
-                  variant="outlined"
-                  onClick={handleCloseNavMenu}
-                  // sx={{
-                  //   my: 2,
-                  //   color: "white",
-                  //   display: "block",
-                  //   margin: "0 10px",
-                  // }}
-                  // activeStyle={{
-                  //   color: "white",
-                  //   backgroundColor: "#4fa94d",
-                  // }}
-                  // style={({ isActive, isPending }) => {
-                  //   return {
-                  //     fontWeight: isActive ? "bold" : "",
-                  //     color: isPending ? "red" : "black",
-                  //   };
-                  // }}
-                >
+                <ButtonLink variant="outlined" onClick={handleCloseNavMenu}>
                   {page}
                 </ButtonLink>
               </Link>
             ))}
           </Box>
           <TextField
-            sx={{ ml: 2, my: 2 }}
+            sx={{ mr: 12, my: 2 }}
             id="standard-basic"
             InputProps={{
               startAdornment: <SearchIcon />,
@@ -240,11 +223,44 @@ function Header() {
             size="small"
             variant="standard"
           />
+          {isAuthenticated ? (
+            <>
+              <Button
+                variant="outlined"
+                color="error"
+                loading={isLoading}
+                onClick={() => {
+                  logout();
+                }}
+              >
+                LogOut
+              </Button>
+              <Link to={"/profile"}>
+                <Avatar
+                  sx={{ margin: "0 10px" }}
+                  alt="Remy Sharp"
+                  src={user.picture}
+                />
+              </Link>
+            </>
+          ) : (
+            <Button
+              variant="outlined"
+              color="success"
+              loading={isLoading}
+              onClick={() => {
+                loginWithRedirect();
+              }}
+            >
+              Login
+            </Button>
+          )}
+
           <Link to="/cart" style={{ textDecoration: "none" }}>
             <Badge
               badgeContent={calcularTotalProductosEnCarrito()}
               color="success"
-              sx={{ marginLeft: "50px" }}
+              sx={{ marginLeft: "10px" }}
             >
               <ShoppingCartIcon color="action" />
             </Badge>

@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import DetailProduct from "./components/DetailProduct";
 import CartContextProvider from "./context/CartContext";
 import Cart from "./components/Cart";
+import Profile from "./components/Profile";
 
 // const router = createBrowserRouter([   /* ENRUTAMIENTO AVANZADO --- HACEN LO MISMO QUE EL UTILIZADO EN LA APP */
 //   {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/category/:nameCategory" element={<ContainCard />} />
           <Route path="/detailProduct/:idProduct" element={<DetailProduct />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<h1>NOT FOUND</h1>} />
         </Routes>
       </CartContextProvider>
