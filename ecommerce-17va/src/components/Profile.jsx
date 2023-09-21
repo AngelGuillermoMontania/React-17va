@@ -16,6 +16,12 @@ export default function Profile() {
     <div>
       <h1>Email: {user.email}</h1>
       <img src={user.picture} height={240} width={240} />
+
+      {user.email === "angelguillermomontania@gmail.com" ? (
+        <h1>Es admin</h1>
+      ) : (
+        <h1>No es admin</h1>
+      )}
     </div>
   );
 }
