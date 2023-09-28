@@ -23,18 +23,31 @@ function useProduct() {
     setLoading(true);
     setAllProducts([]);
     // Si no, mostrare todos los productos
+    // getDocs(productos)
+    //   .then((res) => {
+    //     const products = res.docs.map((product) => {
+    //       return {
+    //         ...product.data(),
+    //         id: product.id,
+    //       };
+    //     });
+    //     setAllProducts(products);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => console.log(error));
+    setLoading(true);
+    setAllProducts([]);
+    // Si no, mostrare todos los productos
     getDocs(productos)
-      .then((res) => {
-        const products = res.docs.map((product) => {
-          return {
-            ...product.data(),
-            id: product.id,
-          };
-        });
-        setAllProducts(products);
-        setLoading(false);
-      })
-      .catch((error) => console.log(error));
+    const productsDocs = await res.docs.map();
+    const products = productsDocs.map(() => {
+      return {
+        ...product.data(),
+        id: product.id,
+      };
+    })
+    setAllProducts(products);
+    setLoading(false);
   }
 
   function getCategoryProducts(nameCategory) {

@@ -25,3 +25,19 @@ export default function Profile() {
     </div>
   );
 }
+
+// AGREGAR UN PRODUCTO A LA BD DE FIRESTORE
+// import { doc, setDoc } from "firebase/firestore";
+
+// // Add a new document in collection "cities"
+// await setDoc(doc(db, "producto", crypto.randomUUID()), {
+//   name: "Nike",
+//   valor: 80000,
+//   categoria: "Deportivas"
+// });
+
+// setDoc(doc(db, "producto", crypto.randomUUID()), {
+//   name: "Nike",
+//   valor: 80000,
+//   categoria: "Deportivas"
+// }).then(() => {});
